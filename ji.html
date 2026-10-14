@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1">
+  <title></title>
+</head>
+<style type="text/css" media="all">
+body{
+  background: #2A1B0D;
+  color: #fff;
+  user-select: none;
+}
+  .minu_box{
+    background: ;
+    
+  }
+  .time_prayer{
+      display: grid;
+      gap: 5px;
+      padding: 20px;
+      border: 5px double gold;
+      border-radius: 10px;
+  }
+  
+    .time_prayer p{
+      display: flex;
+        flex-direction: row;
+        gap: 40px;
+        padding: 5px;
+       text-shadow: 0px 1px 15px palegoldenrod;
+        color: darkgoldenrod;
+        border-bottom: 1px solid #000;
+    }
+  .theTime{
+    border: 2px solid #000;
+    padding: 5px;
+    border-radius: 10px;
+  }
+  .info{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    gap: 7px;
+    padding: 5px;
+    background: darkorange;
+    border-radius: 9px;
+  }
+  #center{
+    width:200px;
+    height: 40px;
+    font-size: 20px;
+  }
+  #clock{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 22px;
+    color: #789;
+  }
+  button{
+    background: #090;
+    border: 1px solid #000;
+    color: #ffe;
+    font-size: 15px;
+    border-radius: 30px;
+    margin: 10px;
+    padding: 10px;
+  }
+  button:active {
+    background: #900;
+    color: #fff;
+  }
+  #alshehda{
+   color:gold;
+  }
+  
+</style>
+<body>
+  
+  
+  <div class="minu_box">
+   
+  
+  <select id="center" >
+      <option value="no_conter" >اختار البلاد</option>
+      <option value="sudan">السودان</option>
+      
+      <option value="egypt">مصر</option>
+      <option value="saudi_arabia">السعودية</option>
+      <option value="palestine">فلسطين</option>
+        
+      <option value="qatar">قطر</option>
+      
+  </select>
+  <div>
+      <button  id="butt">تطبيق</button>
+  </div>
+
+  
+  </div>
+  <hr />
+      <h3 id="alshehda">اشهدإن لا اله  الا الله لهُ الحمد و هو علي كل شيئ قدير</h3>
+  <div class="info">
+
+           <h3 id="datcon">
+          
+       </h3>
+       <h3>مواعيد الصلاة بتوقيت</h3>
+
+
+  </div>
+  
+  <div>
+    <div class="time_prayer">
+      <p id="clock">
+        
+        
+        <span id="date">...</span> 
+        <span> التاريخ</span>
+
+        </p>
+      
+      <p>
+        <span>الفجر</span>
+        <span class="theTime" id="Fajr">00:00</span>
+        
+        
+        </p>
+        
+      <p>
+      <span>الظهر</span>
+      <span class="theTime" id="noon">00:00</span>
+      
+      
+      </p>
+
+      <p>
+        <span >العصر</span>
+        <span class="theTime" id="afternoon">00:00</span>
+       
+       
+        </p>
+      <p>
+        <span>المغرب</span>
+        <span class="theTime" id="sunset">00:00</span>
+        
+        </p>
+        
+              <p>
+        <span>العشاء</span>
+        <span class="theTime" id="Isha">00:00</span>
+        
+        </p>
+     </div>
+          <div>
+            
+          </div>
+  </div>
+  
+  
+  <script type="text/javascript" charset="utf-8">
+  let  date =document.getElementById("date")
+  let fajr=document.getElementById("Fajr")
+  let noon =document.getElementById("noon")
+  let afternoon=document.getElementById("afternoon")
+  let sunset = document.getElementById("sunset")
+  
+  let isha = document.getElementById("Isha")
+
+let countries_val=document.getElementById("center")
+let countries = {
+  sudan: "Khartoum",
+  saudi_arabia: "Riyadh",
+  egypt: "Cairo",
+  qatar: "Doha",
+  palestine: "Jerusalem"
+};
+
+document.getElementById("butt").addEventListener('click',async ()=>{
+  if(countries_val.value!=="no_conter"){
+     let resp=await fetch(`https://api.aladhan.com/v1/timingsByCity?city=${countries[countries_val.value]}&country=${countries_val.value}&method=8`)
+     let datas= await resp.json()
+     await setdata(datas)
+    
+  }else{
+    alert("chose your country")
+  }
+ 
+})
+function setdata(dataset){
+  fajr.textContent=dataset.data.timings.Fajr
+    
+    noon.textContent=dataset.data.timings.Dhuhr
+    
+    afternoon.textContent=dataset.data.timings.Asr
+    
+    sunset.textContent=dataset.data.timings.Sunset
+    
+    isha.textContent=dataset.data.timings.Isha
+    
+    date.innerHTML=`<h4> ${dataset.data.date.hijri.date}</h4><h4><span> اليوم:  </span> <span>${dataset.data.date.hijri.weekday.ar}</span></h4>`
+    
+   let datcon= document.getElementById("datcon")
+   datcon.innerHTML=countries_val.value 
+   
+}
+  </script>
+</body>
+
+</html>
